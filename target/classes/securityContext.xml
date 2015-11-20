@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<b:beans xmlns="http://www.springframework.org/schema/security"
+         xmlns:b="http://www.springframework.org/schema/beans"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+						http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd">
+
+    <http entry-point-ref="http403EntryPoint">
+        <intercept-url pattern="/directoryList*" access="permitAll"/>
+        <intercept-url pattern="/users/**" access="permitAll"/>
+        <intercept-url pattern="/health" access="permitAll"/>
+        <intercept-url pattern="/**" access="authenticated"/>
+        <csrf disabled="true"/>
+        <custom-filter ref="jsonPasswordAuthenticator" position="FORM_LOGIN_FILTER"/>
+    </http>
+
+    <authentication-manager alias="authenticationManager">
+        <authentication-provider user-service-ref="mongoUserService">
+            <password-encoder ref="bCryptPasswordEncoder"/>
+        </authentication-provider>
+    </authentication-manager>
+
+    <b:bean id='bCryptPasswordEncoder' class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>
+    <b:bean id="http403EntryPoint" class="org.springframework.security.web.authentication.Http403ForbiddenEntryPoint"/>
+    <b:bean id="okSuccessHandler" class="com.github.msidd.demo.web.OkSuccessHandler"/>
+    <b:bean id="jsonPasswordAuthenticator" class="com.github.msidd.demo.web.JsonPasswordAuthenticator">
+        <b:property name="authenticationManager" ref="authenticationManager"/>
+        <b:property name="authenticationSuccessHandler" ref="okSuccessHandler"/>
+    </b:bean>
+</b:beans>
