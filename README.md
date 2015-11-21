@@ -1,6 +1,6 @@
 # Rest Demo
 Sample application to demo Spring-Data-Rest-Mongo capabilities. To run , make sure that you have java 8 , and maven 3.x installed
-Once fired, this application instantiate in memory mongo db and populate 10 users in the database. And exposes following end ponints as rest
+Once fired, this application instantiate in memory mongo db and populate 10 users in the database, deploying REST services on Spring boot using embeded Tomcat and exposes following end ponints as rest
 
 
 Do the following
